@@ -252,7 +252,7 @@ const X5 = (() => {
 let pendingImp = null;
 function importPage() {
   $('#main').innerHTML = `<div class="imp"><h1>Import 5etools JSON</h1>
-    <p class="note">Add homebrew or your own data in <b>5etools JSON format</b> — the format used by the 5etools homebrew repository and its data files. Creatures, spells, items, magic items, feats, backgrounds, species and conditions are converted, including <code>{@tags}</code> such as <code>{@spell fireball}</code> and <code>{@damage 2d6}</code>. <b>Files stay on this device</b> and are saved in this browser only.</p>
+    <p class="note">Add homebrew or your own data in <b>5etools JSON format</b> — the format used by the 5etools homebrew repository and its data files. Creatures, spells, items, magic items, feats, backgrounds, species and conditions are converted, including <code>{@tags}</code> such as <code>{@spell fireball}</code> and <code>{@damage 2d6}</code>. <b>Everything stays on this device:</b> files are read and converted in your browser and saved in this browser’s own storage. Nothing is uploaded, and the website itself never changes; other people and other devices won’t see your imports. Removing an import (or clearing site data) deletes it.</p>
     <label class="drop" id="drop"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg><b>Drop JSON files here or tap to choose</b><span>One or more .json files in 5etools format</span><input type="file" id="jfile" accept=".json,application/json" multiple></label>
     <div class="frow" style="max-width:760px;margin-top:12px"><input id="jurl" placeholder="…or paste a URL to a 5etools-format JSON file (e.g. a raw GitHub link)"><button class="btn" id="jurlgo">Fetch</button></div>
     <div class="stage" id="stage"></div>
@@ -265,7 +265,10 @@ function importPage() {
   $('#jurlgo').onclick = async () => {
     const u = $('#jurl').value.trim(); if (!u) return;
     $('#stage').innerHTML = `<div class="progt">Fetching…</div>`;
-    try { const r = await fetch(u); if (!r.ok) throw new Error('HTTP ' + r.status); const j = await r.json(); showImport([{ json: j, name: decodeURIComponent(u.split('/').pop() || 'remote.json') }]); }
+    // Read-only download: GET only, no cookies or credentials sent, never uploads or writes anything to any server.
+    // Everything imported is stored in this browser's IndexedDB (see IDB in core.js) and nowhere else.
+    if (!/^https?:\/\//i.test(u)) { $('#stage').innerHTML = `<div class="warn">Enter a full http(s):// link.</div>`; return; }
+    try { const r = await fetch(u, { method: 'GET', credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store' }); if (!r.ok) throw new Error('HTTP ' + r.status); const j = await r.json(); showImport([{ json: j, name: decodeURIComponent(u.split('/').pop() || 'remote.json') }]); }
     catch (e) { $('#stage').innerHTML = `<div class="warn">Couldn’t fetch that file: ${esc(e.message)}. The server may not allow downloads from other sites; download the file and drop it here instead.</div>`; }
   };
   document.title = 'Import — Vanadium 5e';
