@@ -29,6 +29,12 @@ Any static host works the same way (GitHub Pages, Netlify, the server you use fo
   - DM Screen.
   - Random Magic Item.
   - Dice roller: advantage/disadvantage, `4d6kh3` and similar expressions.
+  - Card Maker: printable item and quest cards.
+    - Item cards start empty, or pre-filled from any SRD or imported item (search on the Card Maker page, or **+ Card** on an item's page). Every card stays editable.
+    - Quest cards have a title, who gave the quest, what the heroes were asked to do, and a checklist of rewards (gold, items, allies, XP, favours, anything else).
+    - Four styles, three card sizes, 4,000+ icons, a colour per card.
+    - Print or save as PDF at real size, with crop marks and backs mirrored for double-sided printing. In the print dialog, set margins to *None* and turn on *Background graphics*.
+    - Cards are stored in this browser only.
 - **Import 5etools JSON:** load homebrew or your own 5etools-format files (creatures, spells, items, feats, backgrounds, species, conditions).
   - `{@tags}` are converted.
   - Imports are stored in this browser only.
@@ -45,6 +51,8 @@ Any static host works the same way (GitHub Pages, Netlify, the server you use fo
 | `js/pages.js` | List pages, class pages, rules reader, home, library, search |
 | `js/dm.js` | Dice, encounter builder, initiative, DM screen, random item |
 | `js/import5et.js` | 5etools-format importer |
+| `js/cards.js` | Card Maker: item and quest cards, icon picker, print sheets |
+| `data/icons-gi.gz.txt` | Card icons from game-icons.net (CC BY 3.0), the same file the Draw Steel version uses |
 | `js/main.js` | Boot, router |
 | `data/srd.json`, `data/srd.gz.txt` | Built SRD data (the app prefers the compressed `.gz.txt`) |
 | `tools/build-srd.mjs` | Builds `data/` from the 5e-bits SRD database |
@@ -69,4 +77,4 @@ Bump `DATA_V` in `js/core.js` whenever the data changes, so browsers drop their 
 
 ## Legal
 
-This work includes material from the System Reference Document 5.1 and the System Reference Document 5.2 by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. Both SRDs are licensed under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode). The structured data comes from 5e-bits/5e-database (MIT). Some icons are from Lucide (ISC). Full notices are in [CREDITS.md](CREDITS.md). Vanadium is not affiliated with or endorsed by Wizards of the Coast.
+This work includes material from the System Reference Document 5.1 and the System Reference Document 5.2 by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. Both SRDs are licensed under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode). The structured data comes from 5e-bits/5e-database (MIT). Some icons are from Lucide (ISC). The Card Maker icons are from game-icons.net (CC BY 3.0). Full notices are in [CREDITS.md](CREDITS.md). Vanadium is not affiliated with or endorsed by Wizards of the Coast.

@@ -110,6 +110,7 @@ const ICO = {
   dice: '<path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="m12 8-4 7h8z"/>',
   upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  cards: '<rect x="3" y="6" width="12" height="16" rx="2"/><path d="M8 2h11a2 2 0 0 1 2 2v14"/>',
   gem: '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8 9l4-6 4 6z"/>'
 };
 const ico = (k, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICO[k] || ''}</svg>`;
@@ -131,7 +132,7 @@ function MENU() {
     ['Rules', [['book', 'SRD Rules (5.1)'], ['screen', 'DM Screen & Quick Reference'], ['-'], ['conditions'], ['skills'], ['languages'], ['damage'], ['properties']]],
     ['Player', [['classes'], ['races'], ['backgrounds'], ['feats'], ['-'], ['spells']]],
     ['Bestiary', [['monsters'], ['-'], ['encounter', 'Encounter Builder'], ['initiative', 'Initiative Tracker']]],
-    ['Items', [['items'], ['magic'], ['poisons'], ['-'], ['loot', 'Random Magic Item']]],
+    ['Items', [['items'], ['magic'], ['poisons'], ['-'], ['loot', 'Random Magic Item'], ['cards', 'Card Maker']]],
     ['Utilities', [['roller', 'Dice Roller'], ['import', 'Import 5etools JSON'], ['library', 'Library & Sources'], ['pinned', 'Pinned Items']]]
   ];
 }

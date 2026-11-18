@@ -80,6 +80,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Card icons: game-icons.net (CC BY 3.0)
+
+`data/icons-gi.gz.txt` holds the icons used by the Card Maker. They come from https://game-icons.net, by Lorc, Delapouite and contributors, and are licensed under the Creative Commons Attribution 3.0 Unported License, https://creativecommons.org/licenses/by/3.0/. The icons are unchanged apart from being converted to SVG path data. Printed card sheets carry this credit in the page margin.
+
 ## Fonts
 
 Inter, Source Serif 4 and Barlow Condensed are loaded at runtime from Google Fonts (SIL Open Font License 1.1). No font files are included in this repository.

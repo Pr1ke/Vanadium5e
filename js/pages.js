@@ -35,11 +35,13 @@ const LIST = {
   items: {
     cols: [['Name', e => e.name, 'nm', null, e => nameCol(e)], ['Category', e => e.sub || e.cat, 'mu'], ['Cost', e => e.cost, 'mu', e => e.costN || 0], ['Weight', e => e.weight, 'mu', e => e.weightN || 0]],
     filters: [['Category', e => e.cat], ['Subcategory', e => e.sub || null], ['Property', e => e.props || [], null, true], ['Mastery', e => e.mastery || null], ['Damage type', e => e.dmg ? cap(e.dmg.split(' ').pop()) : null]],
+    tools: e => `<a class="ibtn" href="#cards--items--${esc(e.id)}" title="Make a printable card from this item">+ Card</a>`,
     meta: e => [e.cat, e.sub].filter(Boolean).join(' · ')
   },
   magic: {
     cols: [['Name', e => e.name, 'nm', null, e => nameCol(e)], ['Rarity', e => e.rarity, 'mu', e => RARO[e.rarity] || 9, e => `<span class="${rarCls(e.rarity)}">${esc(e.rarity)}</span>`], ['Type', e => e.cat, 'mu'], ['Attune', e => e.attune ? 'Yes' : '—', 'mu']],
     filters: [['Rarity', e => e.rarity, (x, y) => (RARO[x] || 9) - (RARO[y] || 9)], ['Type', e => e.cat], ['Attunement', e => e.attune ? 'Requires attunement' : 'No attunement']],
+    tools: e => `<a class="ibtn" href="#cards--magic--${esc(e.id)}" title="Make a printable card from this item">+ Card</a>`,
     meta: e => e.typeLine || e.rarity
   },
   races: { cols: [['Name', e => e.name, 'nm', null, e => nameCol(e)], ['Size', e => e.size, 'mu'], ['Speed', e => e.speed, 'mu'], ['Ability', e => e.asi, 'mu']], filters: [['Size', e => e.size]], meta: e => e.ed === '2014' ? 'Race' : 'Species' },
@@ -229,7 +231,7 @@ function bookPage(ch, anchor) {
 
 // ---------- home ----------
 function home() {
-  const feats = [['encounter', 'Encounter Builder', 'Budget XP, see difficulty', 'swords', 'acc'], ['initiative', 'Initiative Tracker', 'Turns, HP and conditions', 'list', 'steel'], ['screen', 'DM Screen', 'DCs, cover, travel, exhaustion', 'screen', 'gold'], ['loot', 'Random Magic Item', 'Roll treasure by rarity', 'gem', 'moss'], ['import', 'Import 5etools JSON', 'Add homebrew & your own data', 'upload', 'acc']];
+  const feats = [['encounter', 'Encounter Builder', 'Budget XP, see difficulty', 'swords', 'acc'], ['initiative', 'Initiative Tracker', 'Turns, HP and conditions', 'list', 'steel'], ['screen', 'DM Screen', 'DCs, cover, travel, exhaustion', 'screen', 'gold'], ['loot', 'Random Magic Item', 'Roll treasure by rarity', 'gem', 'moss'], ['cards', 'Card Maker', 'Print item & quest cards', 'cards', 'gold'], ['import', 'Import 5etools JSON', 'Add homebrew & your own data', 'upload', 'acc']];
   const blurb = {
     spells: 'Every spell with filters by class, level, school and more', monsters: 'Stat blocks with clickable dice, filters by CR, type and traits', items: 'Weapons, armor, gear, tools, mounts and packs', magic: 'Wondrous items, weapons, armor, potions, by rarity',
     classes: 'Class tables, features by level, subclasses, spell lists', races: 'Traits, sizes and lineages', backgrounds: 'Proficiencies, feats and equipment', feats: 'Origin, general, fighting style and epic boons',
@@ -327,7 +329,7 @@ function pinnedPage() {
 // ---------- search ----------
 let SIDX = [];
 const TPRI = { conditions: 0, classes: 0, spells: 1, monsters: 1, chapter: 1, races: 1, magic: 2, items: 2, feats: 2, backgrounds: 2, rule: 5, page: 0 };
-const PAGES = [['encounter', 'Encounter Builder'], ['initiative', 'Initiative Tracker'], ['screen', 'DM Screen'], ['loot', 'Random Magic Item'], ['import', 'Import 5etools JSON'], ['library', 'Library'], ['roller', 'Dice Roller']];
+const PAGES = [['encounter', 'Encounter Builder'], ['initiative', 'Initiative Tracker'], ['screen', 'DM Screen'], ['loot', 'Random Magic Item'], ['cards', 'Card Maker'], ['import', 'Import 5etools JSON'], ['library', 'Library'], ['roller', 'Dice Roller']];
 function buildIndex() {
   SIDX = [];
   Object.keys(TYPES).forEach(t => itemsOf(t).forEach(e => SIDX.push({
@@ -398,7 +400,7 @@ function browseSheet() {
   const sec = (t, ks) => `<h3>${t}</h3><div class="sgrid">${ks.map(([k, l, d]) => `<a href="#${k}"><b>${esc(l || TYPES[k].label)}</b><span>${esc(d || (TYPES[k] ? itemsOf(k).length + ' entries' : ''))}</span></a>`).join('')}</div>`;
   $('#sheet').innerHTML = `<div class="grab"></div><h3>Rules edition</h3><div class="edseg">${edSegHtml()}</div>` +
     sec('Player', [['classes'], ['races'], ['backgrounds'], ['feats'], ['spells']]) +
-    sec('Game master', [['monsters'], ['encounter', 'Encounter Builder', 'XP budget & difficulty'], ['initiative', 'Initiative', 'Turns, HP, conditions'], ['screen', 'DM Screen', 'Quick reference'], ['loot', 'Random Item', 'Roll by rarity'], ['import', 'Import', '5etools JSON']]) +
+    sec('Game master', [['monsters'], ['encounter', 'Encounter Builder', 'XP budget & difficulty'], ['initiative', 'Initiative', 'Turns, HP, conditions'], ['screen', 'DM Screen', 'Quick reference'], ['loot', 'Random Item', 'Roll by rarity'], ['cards', 'Card Maker', 'Item & quest cards'], ['import', 'Import', '5etools JSON']]) +
     sec('Items & reference', [['items'], ['magic'], ['poisons'], ['conditions'], ['skills'], ['properties'], ['languages'], ['damage']]) +
     `<p class="attrib">Content from SRD 5.1 and SRD 5.2 by Wizards of the Coast LLC, CC-BY-4.0. Not affiliated with Wizards of the Coast.</p>`;
   $('#sheet').classList.add('on'); showScrim();

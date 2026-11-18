@@ -77,6 +77,7 @@ ${extra}
 <script src="js/pages.js"></script>
 <script src="js/dm.js"></script>
 <script src="js/import5et.js"></script>
+<script src="js/cards.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

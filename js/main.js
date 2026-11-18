@@ -36,6 +36,7 @@ function route() {
   if (a === 'initiative') return page(initiativePage);
   if (a === 'screen') return page(screenPage);
   if (a === 'loot') return page(() => lootPage());
+  if (a === 'cards') return page(() => cardsPage(b, c));
   if (a === 'roller') { openRoller(); history.replaceState(null, '', '#'); return page(home); }
   if (a === 'classes') return page(() => b ? classPage(b) : classIndex());
   if (LIST[a]) {
