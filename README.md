@@ -69,4 +69,4 @@ Bump `DATA_V` in `js/core.js` whenever the data changes, so browsers drop their 
 
 ## Legal
 
-This work includes material from the System Reference Document 5.1 and the System Reference Document 5.2 by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. Both SRDs are licensed under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode). The structured data comes from 5e-bits/5e-database (MIT). Vanadium is not affiliated with or endorsed by Wizards of the Coast.
+This work includes material from the System Reference Document 5.1 and the System Reference Document 5.2 by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. Both SRDs are licensed under the Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/legalcode). The structured data comes from 5e-bits/5e-database (MIT). Some icons are from Lucide (ISC). Full notices are in [CREDITS.md](CREDITS.md). Vanadium is not affiliated with or endorsed by Wizards of the Coast.
