@@ -263,8 +263,45 @@ function libraryPage() {
       ${PACKS.map(p => card('Imported · ' + esc(p.fileName || 'JSON'), p.title, esc(cnt(null, p) || 'empty'), `<button class="btn danger" data-delpack="${esc(p.id)}">Remove</button>`, 'k-adventure')).join('')}
       <a class="bookc" href="#import" style="text-decoration:none;color:var(--ink);border-style:dashed;justify-content:center"><div class="kind">Add content</div><b>Import 5etools JSON →</b><div class="cnt">Homebrew and your own data in 5etools format</div></a>
     </div>
+    <div class="mine" id="updbox" style="max-width:760px"></div>
     <div class="attrib"><b>Legal.</b> This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) and the System Reference Document 5.2 (“SRD 5.2”) by Wizards of the Coast LLC, available at <a href="https://www.dndbeyond.com/srd" target="_blank" rel="noopener">dndbeyond.com/srd</a>. The SRD 5.1 and SRD 5.2 are licensed under the Creative Commons Attribution 4.0 International License, available at <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" rel="noopener">creativecommons.org/licenses/by/4.0/legalcode</a>. Structured data from the 5e-bits <a href="https://github.com/5e-bits/5e-database" target="_blank" rel="noopener">5e-database</a> (MIT). Vanadium is not affiliated with or endorsed by Wizards of the Coast. Data built ${esc(D.meta?.built || '')}.</div></div>`;
   document.title = 'Library — Vanadium 5e';
+  updaterBox();
+}
+
+// ---------- site updater (deploy/update.php on the server) ----------
+let updTimer = null;
+async function updaterBox(msg) {
+  const box = $('#updbox'); if (!box) return;
+  clearInterval(updTimer);
+  let st = null;
+  try { const r = await fetch('update.php', { cache: 'no-store', credentials: 'same-origin' }); if (r.ok && /json/.test(r.headers.get('content-type') || '')) st = await r.json(); } catch (e) { }
+  if (!$('#updbox')) return;
+  if (!st) { box.innerHTML = `<h2>Site updates</h2><div class="note">The updater isn’t installed on this server (upload <code>deploy/update.php</code> next to <code>index.html</code> to enable the update button).</div>`; return; }
+  let left = st.next_allowed_in || 0;
+  const when = st.updated_at ? new Date(st.updated_at).toLocaleString() : 'never (installed by hand)';
+  box.innerHTML = `<h2>Site updates</h2><div class="it"><div class="t"><b>${st.commit ? 'Version ' + esc(st.commit.slice(0, 7)) : 'Unknown version'}</b><span>Last update: ${esc(when)}${st.last_result ? ' · ' + esc(st.last_result) : ''}</span>${msg ? `<span style="display:block;color:var(--ink);margin-top:2px">${msg}</span>` : ''}</div><button class="btn" id="updgo">Update from GitHub</button></div><div class="note" style="font-size:12.5px">Downloads the latest version of <code>${esc(st.repo)}</code> (${esc(st.branch)}) onto this server. Anyone can press it, at most once every ${Math.round(st.cooldown / 60)} minutes.</div>`;
+  const btn = $('#updgo');
+  const tick = () => { if (left > 0) { btn.disabled = true; btn.textContent = `Available in ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`; left--; } else { btn.disabled = false; btn.textContent = 'Update from GitHub'; clearInterval(updTimer); } };
+  tick(); if (left > 0) updTimer = setInterval(tick, 1000);
+  btn.onclick = async () => {
+    const h = {};
+    if (st.needs_key) { const k = prompt('Update password:'); if (!k) return; h['X-Update-Key'] = k; }
+    btn.disabled = true; btn.textContent = 'Updating…';
+    let res;
+    try { const r = await fetch('update.php', { method: 'POST', headers: h, cache: 'no-store', credentials: 'same-origin' }); res = await r.json(); }
+    catch (e) { res = { ok: false, error: 'the server didn’t answer (' + e.message + ')' }; }
+    if (res.status === 'updated') {
+      toast('Updated, reloading…');
+      try { // refresh this browser's cached copies of the app files, then reload
+        const files = ['./', 'index.html', ...$$('script[src]').map(s => s.getAttribute('src'))];
+        await Promise.all(files.map(f => fetch(f, { cache: 'reload' }).catch(() => { })));
+        for (const k of await caches.keys()) if (k.startsWith('v5-')) await caches.delete(k);
+      } catch (e) { }
+      setTimeout(() => location.reload(), 400); return;
+    }
+    updaterBox(res.status === 'current' ? 'Already up to date.' : res.status === 'cooldown' ? 'Someone updated recently. Try again when the timer runs out.' : `<span style="color:var(--bad)">Update failed: ${esc(res.error || 'unknown error')}</span>`);
+  };
 }
 async function deletePack(id) {
   const p = PACKS.find(x => x.id === id); if (!p) return;

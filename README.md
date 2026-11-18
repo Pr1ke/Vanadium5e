@@ -11,7 +11,7 @@ cd "Vanadium — 5e Reference"
 python -m http.server 8000      # then open http://localhost:8000
 ```
 
-Any static host works the same way (GitHub Pages, Netlify, the server you use for the Draw Steel version). To have your own server update itself whenever you push to `main`, see [deploy/README.md](deploy/README.md).
+Any static host works the same way (GitHub Pages, Netlify, the server you use for the Draw Steel version). To get an "Update from GitHub" button on a PHP/Apache host, see [deploy/README.md](deploy/README.md).
 
 ## What's inside
 
