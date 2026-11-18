@@ -1,0 +1,40 @@
+[Unit]
+Description=Vanadium 5e GitHub webhook (updates the static site on push)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vanadium-deploy
+Group=vanadium-deploy
+EnvironmentFile=/etc/vanadium5e-webhook.env
+Environment=HOME=/srv/vanadium5e
+ExecStart=/usr/bin/python3 -I /srv/vanadium5e/webhook.py
+Restart=on-failure
+RestartSec=5
+
+# --- sandbox: the service can only write its git data and the web root ---
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/srv/vanadium5e /var/www/vanadium5e
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+UMask=0022
+
+[Install]
+WantedBy=multi-user.target
